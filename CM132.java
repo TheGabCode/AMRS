@@ -88,7 +88,7 @@ public class CM132{
 	//gawin yung computation
 		
 	public void process(){
-		int a = 0, op = 0; 
+		int a = 0, op = 0, line_count = 0; 
 
 		for(int i=0; i<instructions.get(0).size(); i++){
 			if(!values.containsKey((String)instructions.get(i).get(1))){
@@ -97,6 +97,7 @@ public class CM132{
 		}
 
 		while(a<instructions.size()){
+			line_count++;
 			op = checkOperand1(a);
 			if(op == 1){
 				performLoad(a);
@@ -104,8 +105,10 @@ public class CM132{
 				performAdd(a);
 			}else if(op == 3){	
 				performSub(a);
-			}else{
+			}else if(op == 4){
 				performCmp(a);
+			}else{
+				System.out.println("Syntax error at line number: " + line_count + " " + instructions.get(a));
 			}
 			a++;
 		}
@@ -132,8 +135,10 @@ public class CM132{
 			op1 = 2;
 		}else if(match3.matches()){
 			op1 = 3;
-		}else{
+		}else if(match4.matches()){
 			op1 = 4;
+		}else{
+			System.out.println("Syntax Error!");
 		}
 		
 		return op1;
