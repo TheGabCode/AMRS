@@ -5,6 +5,7 @@ public class Parser{
 	private LinkedList<Instruction> instructions;
 
 	public Parser(String path){
+		this.instructions = new LinkedList<Instruction>();
 		this.parse(path);
 	}
 
@@ -21,14 +22,15 @@ public class Parser{
 				StringTokenizer st = new StringTokenizer(inText);
 				while(st.hasMoreTokens()){
 					String operation = st.nextToken();
+					String op1 = st.nextToken();
+					String op2 = st.nextToken();
 
-					if(!operation.equals("LOAD") || !operation.equals("ADD") || !operation.equals("SUB") || !operation.equals("CMP")){
+					if(!operation.equals("LOAD") && !operation.equals("ADD") && !operation.equals("SUB") && !operation.equals("CMP")){
 						System.out.println("Syntax error at line " + lineCount);
 						return;
 					}
 
-					String op1 = st.nextToken();
-					String op2 = st.nextToken();
+					System.out.println(operation+"\t"+op1+"\t"+op2);
 
 					if(operation.equals("LOAD")){
 						Instruction inst = new Instruction(op1, Integer.parseInt(op2));
@@ -36,12 +38,10 @@ public class Parser{
 					}else{
 						Instruction inst = new Instruction(operation, op1, op2);
 						this.instructions.add(inst);
-					}
-					
+					}					
 				}
-				br.close();
 			}
-
+			br.close();
 		}catch(IOException e){
 			System.out.println(e.toString());
 		}
