@@ -9,11 +9,10 @@ public class Instruction{
 	String state = null;
 	int address;
 
-	public Instruction(String operation,String op1,String op2,int address){
+	public Instruction(String operation,String op1,String op2){
 		this.operation = operation;
 		this.operand1 = op1;
 		this.operand2 = op2;
-		this.address = address;
 	}
 
 	public void start(HashMap<String,Integer> registers){

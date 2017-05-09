@@ -23,25 +23,13 @@ public class Main{
 		BufferedReader br;
 		FileReader fr;
 		int program_counter = 0; //PC
-		LinkedList<Instruction> instructions = new LinkedList<Instruction>();
+		LinkedList<Instruction> instructions;
 		HashMap<String,Integer> registers = new HashMap<String,Integer>();
 		ArrayList<ArrayList<Instruction>> instruction_set = new ArrayList<ArrayList<Instruction>>();
 		ArrayList<Instruction> instructions_list = new ArrayList<Instruction>();
-		try{
-			fr = new FileReader(args[0]);
-			br = new BufferedReader(fr);
+		Parser parser = new Parser(args[0]);
 
-			String line;
-			String[] tokens;
-			while((line = br.readLine()) != null){
-				tokens = line.split("\\s+");
-				instructions.add(new Instruction(tokens[0].toUpperCase(),tokens[1],tokens[2],program_counter));
-				program_counter++;
-			}
-
-		}catch(IOException e){
-			e.printStackTrace();
-		}
+		instructions = (LinkedList<Instruction>) parser.getInstructions();
 
 		total_clock_cycles = 5 + instructions.size() - 1;
 
