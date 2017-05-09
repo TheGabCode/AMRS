@@ -1,6 +1,9 @@
 import java.util.LinkedList;
 import java.util.HashMap;
+
+import java.util.Scanner;
 public class Scheduler{
+	Scanner sc = new Scanner(System.in);
 	LinkedList<Instruction> instructions = new LinkedList<Instruction>();
 	HashMap<String, Instruction> queue = new HashMap<String, Instruction>();
 	int c = 0;
@@ -21,6 +24,7 @@ public class Scheduler{
 			this.clock_cycle += 1;
 			System.out.println("clock_cycle " + clock_cycle);
 
+
 			if(instructions.size()!=0)	{
 				this.queue.put("F", instructions.pop());
 				this.queue.get("F").fetch();
@@ -33,6 +37,7 @@ public class Scheduler{
 		
 			this.queue.put("E", this.queue.get("D"));
 			this.queue.put("D", this.queue.get("F"));
+			sc.nextLine();
 			c++;
 		}
 	}

@@ -41,59 +41,6 @@ public class Main{
 
 		pipeline.start();
 
-	/*	for(int i = 0; i < instructions.size(); i++){
-			instructions.get(i).start(registers);
-		}
-*/
-
-
-/*		//printRegisters(registers);
-		for(int i = 0; i < instructions.size(); i++){ //arraylist<arraylist<instruction>>()
-			instruction_set.add(instructions_list);
-			System.out.println("BBB"+instruction_set.get(i).size());			
-		}
-*/
-	
-/*		for(int i = 0; i < instructions.size(); i++){
-
-		}
-
-*/
-
-
-	//	System.out.println("BBB"+instruction_set.get(1).size());
-	/*for(int i = 0; i < instruction_set.size();i++){
-			for(int j = 0; j < instruction_set.get(i).size();j++){
-				System.out.println("Clock cycle" + (i+1));
-				System.out.println(j);
-			}
-		}*/
-		
-	/*	int stage = 0;
-		for(int i = 0; i < instruction_set.size(); i++){
-			for(int j = 0; j < instruction_set.get(stage).size(); j++){
-				System.out.println("AAAA"+instruction_set.get(stage).size());
-				if(stage == 0){
-					System.out.println("Clock Cycle: " + 1);
-					instruction_set.get(stage).get(j).state = "F";
-				}else if (stage == 1) {
-					System.out.println("Clock Cycle: " + 2);
-					instruction_set.get(stage-1).get(j).state = "D";
-					instruction_set.get(stage-1).get(j).decode(registers);
-					instruction_set.get(stage).get(j).fetch();
-				}else if (stage == 2){
-					instruction_set.get(stage).get(j).state = "E";
-				}else if(stage == 3){
-					instruction_set.get(stage).get(j).state = "M";
-				}else if(stage == 4){
-					instruction_set.get(stage).get(j).state = "W";
-				}
-			}
-			stage++;
-		}
-*/
-
-
 	}
 
 

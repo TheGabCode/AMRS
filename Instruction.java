@@ -25,6 +25,14 @@ public class Instruction{
 		printResult(registers);
 	}
 
+	public String getOperation(){
+		return this.operation;
+	}
+
+	public String getOp1(){
+		return this.operand1;
+	}
+
 	public void decode(HashMap<String,Integer> registers){
 		System.out.println("Decoding...");
 		try{
