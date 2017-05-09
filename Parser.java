@@ -27,18 +27,15 @@ public class Parser{
 
 					if(!operation.equals("LOAD") && !operation.equals("ADD") && !operation.equals("SUB") && !operation.equals("CMP")){
 						System.out.println("Syntax error at line " + lineCount);
-						return;
+						System.exit(1);
 					}
 
 					System.out.println(operation+"\t"+op1+"\t"+op2);
 
-					if(operation.equals("LOAD")){
-						Instruction inst = new Instruction(op1, Integer.parseInt(op2));
-						this.instructions.add(inst);
-					}else{
-						Instruction inst = new Instruction(operation, op1, op2);
-						this.instructions.add(inst);
-					}					
+
+					Instruction inst = new Instruction(operation, op1, op2, lineCount);
+					this.instructions.add(inst);
+									
 				}
 			}
 			br.close();

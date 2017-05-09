@@ -8,11 +8,13 @@ public class Instruction{
 	int valueZF; //zero flag
 	String state = null;
 	int address;
+	int immediate;
 
-	public Instruction(String operation,String op1,String op2){
+	public Instruction(String operation,String op1, String op2, int address){
 		this.operation = operation;
 		this.operand1 = op1;
 		this.operand2 = op2;
+		this.address = address;
 	}
 
 	public void start(HashMap<String,Integer> registers){
