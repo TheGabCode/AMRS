@@ -26,12 +26,20 @@ public class Parser{
 					String op2 = st.nextToken();
 
 					if(!operation.equals("LOAD") && !operation.equals("ADD") && !operation.equals("SUB") && !operation.equals("CMP")){
-						System.out.println("Syntax error at line " + lineCount);
+						System.out.println("Syntax error: Invalid operation at line " + lineCount);
+						System.exit(1);
+					}else if(operation.equals("LOAD") && !op2.matches("^-?\\d+$")){
+						System.out.println("Syntax error: Invalid LOAD operation format at line " + lineCount);
+						System.exit(1);
+					}else if(!op1.matches("^R[1-9]|[1-2][0-9]|[3][1-2]$")){
+						System.out.println("Syntax error: Invalid register name at line " + lineCount);
+						System.exit(1);
+					}else if(!operation.equals("LOAD") && !op2.matches("^R[1-9]|[1-2][0-9]|[3][1-2]$")){
+						System.out.println("Syntax error: Invalid register name at line " + lineCount);
 						System.exit(1);
 					}
 
 					System.out.println(operation+"\t"+op1+"\t"+op2);
-
 
 					Instruction inst = new Instruction(operation, op1, op2, lineCount);
 					this.instructions.add(inst);
