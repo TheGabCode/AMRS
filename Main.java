@@ -28,7 +28,9 @@ public class Main{
 		Parser parser = new Parser(args[0]);
 		
 		instructions = (LinkedList<Instruction>) parser.getInstructions();
-
+		parser.getDependencies();
+		parser.printDependencies();
+		System.out.println();
 		total_clock_cycles = 5 + instructions.size() - 1;
 
 		//initialize special registers

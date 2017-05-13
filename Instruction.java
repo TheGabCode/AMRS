@@ -26,6 +26,10 @@ public class Instruction{
 		return this.operand2;
 	}
 
+	public int getAddress(){
+		return this.address;
+	}
+
 	public void fetch(HashMap<String,Integer> s_registers){
 		System.out.println("Fetching " + this.operation + " " + this.operand1 + " " + this.operand2 + " at address: " + this.address);
 		s_registers.put("PC", s_registers.get("PC") + 1);
