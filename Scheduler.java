@@ -5,33 +5,49 @@ import java.util.Scanner;
 public class Scheduler{
 	Scanner sc = new Scanner(System.in);
 	LinkedList<Instruction> instructions = new LinkedList<Instruction>();
+	LinkedList<Dependency> dependencies = new LinkedList<Dependency>();
+	LinkedList<Instruction> readyQueue = new LinkedList<Instruction>();
+	LinkedList<Integer> stall = new LinkedList<Integer>();
 	HashMap<String, Instruction> queue = new HashMap<String, Instruction>();
-	int c = 0;
-	int total_clock_cycles;
-	int clock_cycle;
 	HashMap<String,Integer> registers;
 	HashMap<String,Integer> special_registers;
+	int clock_cycle;
+	
 
-	public Scheduler(LinkedList<Instruction> instructions, HashMap<String,Integer> registers, HashMap<String,Integer> special_registers){
+	public Scheduler(LinkedList<Instruction> instructions, LinkedList<Dependency> dependencies, HashMap<String,Integer> registers, HashMap<String,Integer> special_registers){
 		this.instructions = (LinkedList<Instruction>)instructions.clone();
+		this.dependencies = (LinkedList<Dependency>) dependencies.clone();
 		this.registers = (HashMap<String,Integer>)registers.clone();
 		this.special_registers = (HashMap<String,Integer>)special_registers.clone();
+
 		clock_cycle = 0;
-		total_clock_cycles = 5 + (instructions.size() - 1);
+		initQueue();
 	}
 
 
 	public void start(){
-		initQueue();
-		while(c < total_clock_cycles){
+		while(instructions.size() != 0 || readyQueue.size() != 0 || queue.get("W") != null){
 			this.clock_cycle += 1;
-			System.out.println("clock_cycle " + clock_cycle);
+			System.out.println("Clock cycle: " + clock_cycle);
 
-			if(instructions.size()!=0)	{
-				this.queue.put("F", instructions.pop());
-				this.queue.get("F").fetch(special_registers);
+			if(instructions.size() != 0)	this.queue.put("F", instructions.pop());
+
+			if(this.queue.get("F") != null)		this.queue.get("F").fetch(special_registers);
+
+			//stall the dependent instruction
+			if(this.queue.get("F") != null && checkDependency()){
+				this.readyQueue.add(this.queue.get("F"));
+				this.stall.add(this.clock_cycle);
+				this.queue.put("F", null);
 			}
 
+			//check if the dependent instruction is ready to execute
+			if(this.stall.size() != 0 && this.clock_cycle == this.stall.getFirst()+5){
+				System.out.println("Stalled instruction continue");
+				this.queue.put("D", this.readyQueue.pop());
+				this.stall.pop();
+			}
+			
 			if(this.queue.get("D") != null)		this.queue.get("D").decode(special_registers);
 			if(this.queue.get("E") != null)		this.queue.get("E").execute(registers);
 			if(this.queue.get("M") != null)		this.queue.get("M").memory(special_registers);
@@ -41,11 +57,11 @@ public class Scheduler{
 			this.queue.put("M", this.queue.get("E"));
 			this.queue.put("E", this.queue.get("D"));
 			this.queue.put("D", this.queue.get("F"));
+			this.queue.put("F", null);
 
 			printResult(registers, special_registers);
 
 			sc.nextLine();
-			c++;
 		}
 	}
 
@@ -76,5 +92,20 @@ public class Scheduler{
 
 	public HashMap<String,Integer> getSpecialRegisters(){
 		return this.special_registers;
+	}
+
+	public boolean checkDependency(){
+		int dependentAddress = this.queue.get("F").getAddress();
+		for(int i=0; i<this.dependencies.size(); i++){
+			if(dependentAddress == this.dependencies.get(i).addressOfDependent){
+				if (this.clock_cycle < (this.dependencies.get(i).addressDependentOn + 5)) return true;
+				else{
+					for(int j=0; j<this.readyQueue.size(); j++){
+						if(this.dependencies.get(i).addressDependentOn == readyQueue.get(j).address)	return true;
+					}
+				}
+			}
+		}
+		return false;
 	}
 }

@@ -4,6 +4,7 @@ import java.io.*;
 public class Parser{
 	private LinkedList<Instruction> instructions;
 	private LinkedList<Dependency> dependencies;
+
 	public Parser(String path){
 		this.instructions = new LinkedList<Instruction>();
 		this.dependencies = new LinkedList<Dependency>();
@@ -57,38 +58,36 @@ public class Parser{
 		return this.instructions;
 	}
 
-	public void getDependencies(){
+	public LinkedList<Dependency> getDependencies(){
+		return this.dependencies;
+	}
+
+	public void setDependencies(){
 		int addressDependentOn;
 		int addressOfDependent;
 		String register;
-		int pos;
 		for(int i = 0; i < this.instructions.size(); i++){
-			if((i-1) == -1){
-
-			}else{
-				for(int j = 0; j < i; j++){
-					if(instructions.get(i).getOp1().equals(instructions.get(j).getOp1())){//"WAW"
-						addressDependentOn = instructions.get(j).getAddress();
-						addressOfDependent = instructions.get(i).getAddress();
-						register = instructions.get(i).getOp1();
-						this.dependencies.add(new Dependency(addressDependentOn,addressOfDependent,register,"WAW"));
-					}
-					if(instructions.get(i).getOp1().equals(instructions.get(j).getOp2())){ //"WAR"
-						addressDependentOn = instructions.get(j).getAddress();
-						addressOfDependent = instructions.get(i).getAddress();
-						register = instructions.get(i).getOp1();
-						this.dependencies.add(new Dependency(addressDependentOn,addressOfDependent,register,"WAR"));	
-					}
-
-					if(instructions.get(i).getOp2().equals(instructions.get(j).getOp1())){ //"RAW"
-						addressDependentOn = instructions.get(j).getAddress();
-						addressOfDependent = instructions.get(i).getAddress();
-						register = instructions.get(i).getOp2();
-						this.dependencies.add(new Dependency(addressDependentOn,addressOfDependent,register,"RAW"));	
-					}		
+			for(int j = i+1; j < this.instructions.size(); j++){
+				if(instructions.get(i).getOp1().equals(instructions.get(j).getOp1())){//"WAW"
+					addressDependentOn = instructions.get(i).getAddress();
+					addressOfDependent = instructions.get(j).getAddress();
+					register = instructions.get(i).getOp1();
+					this.dependencies.add(new Dependency(addressDependentOn,addressOfDependent,register,"WAW"));
 				}
-				
-			}
+				if(instructions.get(i).getOp1().equals(instructions.get(j).getOp2())){ //"WAR"
+					addressDependentOn = instructions.get(i).getAddress();
+					addressOfDependent = instructions.get(j).getAddress();
+					register = instructions.get(i).getOp1();
+					this.dependencies.add(new Dependency(addressDependentOn,addressOfDependent,register,"WAR"));	
+				}
+
+				if(instructions.get(i).getOp2().equals(instructions.get(j).getOp1())){ //"RAW"
+					addressDependentOn = instructions.get(i).getAddress();
+					addressOfDependent = instructions.get(j).getAddress();
+					register = instructions.get(i).getOp2();
+					this.dependencies.add(new Dependency(addressDependentOn,addressOfDependent,register,"RAW"));	
+				}		
+			}		
 		}
 	}
 

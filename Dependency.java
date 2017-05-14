@@ -4,18 +4,10 @@ public class Dependency{
 	int addressDependentOn;
 	int addressOfDependent;
 
-	public Dependency(int address, int addressOfDependent, String register,String dependencyType){
+	public Dependency(int address, int addressOfDependent, String register, String dependencyType){
 		this.addressDependentOn = address;
 		this.addressOfDependent = addressOfDependent;
 		this.register = register;
 		this.dependencyType = dependencyType;
 	}
-
-/*	public void classifyDependency(){
-
-	}*/
-
-
-
-
 }
