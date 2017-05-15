@@ -4,26 +4,26 @@ import java.io.*;
 public class Parser{
 	private LinkedList<Instruction> instructions;
 	private LinkedList<Dependency> dependencies;
-	// public Vector<LinkedList> instructionsvector;
-	// public LinkedList<Integer> clockcyclelist;
+	public Vector<LinkedList> instructionsvector;
+	public LinkedList<Integer> clockcyclelist;
 
 	public Parser(String path){
 		this.instructions = new LinkedList<Instruction>();
 		this.dependencies = new LinkedList<Dependency>();
-		// this.instructionsvector	= new Vector<LinkedList>();
-		// this.clockcyclelist = new LinkedList<Integer>();
+		this.instructionsvector	= new Vector<LinkedList>();
+		this.clockcyclelist = new LinkedList<Integer>();
 		this.parse(path);
 	}
 
 	public void parse(String path){
-		// instructionsvector.add(clockcyclelist);
+		instructionsvector.add(clockcyclelist);
 		try{
 			BufferedReader br = new BufferedReader(new FileReader(path));
 			String inText;
 			int lineCount = 0;
 
 			while((inText = br.readLine()) != null){
-			// LinkedList list1 = new LinkedList();
+			LinkedList list1 = new LinkedList();
 				inText.trim();
 				lineCount += 1;
 				inText = inText.replaceAll(",", "");
@@ -47,18 +47,25 @@ public class Parser{
 						System.exit(1);
 					}
 
-					//System.out.println(operation+"\t"+op1+"\t"+op2);					
+					//System.out.println(operation+"\t"+op1+"\t"+op2);
+					list1.add(operation);
+					list1.add(op1);
+					list1.add(op2);
 					Instruction inst = new Instruction(operation, op1, op2, lineCount);
 					this.instructions.add(inst);
 					
 									
 				}
-				// instructionsvector.add(list1);
+				instructionsvector.add(list1);
 			}
 			br.close();
 		}catch(IOException e){
 			System.out.println(e.toString());
-		}		
+		}
+		
+		for( LinkedList list : instructionsvector){
+			System.out.println(list);
+		}
 	}
 
 	public LinkedList<Instruction> getInstructions(){

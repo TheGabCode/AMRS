@@ -28,20 +28,11 @@ public class Scheduler{
 	public void start(){
 		while(instructions.size() != 0 || readyQueue.size() != 0 || queue.get("W") != null){
 			this.clock_cycle += 1;
-			
-			System.out.print("Clock Cycle:");
-				for(int i=1; i<=clock_cycle; i++){
-					System.out.print("\t"+ i);
-				}System.out.println();
+			System.out.println("Clock cycle: " + clock_cycle);
 
 			if(instructions.size() != 0)	this.queue.put("F", instructions.pop());
 
-			if(this.queue.get("W") != null)		this.queue.get("W").writeResult(registers, special_registers);
-			if(this.queue.get("M") != null)		this.queue.get("M").memory(special_registers, clock_cycle);
-			if(this.queue.get("E") != null)		this.queue.get("E").execute(registers, clock_cycle);
-			if(this.queue.get("D") != null)		this.queue.get("D").decode(special_registers, clock_cycle);
-			if(this.queue.get("F") != null)		this.queue.get("F").fetch(special_registers, clock_cycle);
-
+			if(this.queue.get("F") != null)		this.queue.get("F").fetch(special_registers);
 
 			//stall the dependent instruction
 			if(this.queue.get("F") != null && checkDependency()){
@@ -52,12 +43,15 @@ public class Scheduler{
 
 			//check if the dependent instruction is ready to execute
 			if(this.stall.size() != 0 && this.clock_cycle == this.stall.getFirst()+5){
-				// System.out.println("Stalled instruction continue");
+				System.out.println("Stalled instruction continue");
 				this.queue.put("D", this.readyQueue.pop());
 				this.stall.pop();
-				System.out.print("Stalled instruction continue\n");
 			}
 			
+			if(this.queue.get("D") != null)		this.queue.get("D").decode(special_registers);
+			if(this.queue.get("E") != null)		this.queue.get("E").execute(registers);
+			if(this.queue.get("M") != null)		this.queue.get("M").memory(special_registers);
+			if(this.queue.get("W") != null)		this.queue.get("W").writeResult(registers, special_registers);
 			
 			this.queue.put("W", this.queue.get("M"));
 			this.queue.put("M", this.queue.get("E"));
@@ -69,7 +63,6 @@ public class Scheduler{
 
 			sc.nextLine();
 		}
-		printFinalResult(registers, special_registers);
 	}
 
 	public void initQueue(){
@@ -81,19 +74,16 @@ public class Scheduler{
 	}
 
 	public void printResult(HashMap<String,Integer> registers, HashMap<String,Integer> s_registers){
-		System.out.println("");
-		System.out.println("PC: " + s_registers.get("PC") + "\t" + "OF: " + s_registers.get("OF"));
-		System.out.println("MBR: " + s_registers.get("MBR") + "\t" + "NF: " + s_registers.get("NF"));
-		System.out.println("MAR: " + s_registers.get("MAR") + "\t" + "ZF: " + s_registers.get("ZF"));
-	}
-
-	public void printFinalResult(HashMap<String,Integer> registers, HashMap<String,Integer> s_registers){
 		for(int i=1; i<17; i++){
 			String temp = "R" + Integer.toString(i);
 			String temp2 = "R" + Integer.toString(16+i);
-			System.out.print("R"+i+": "+registers.get(temp)+"\t");
-			System.out.print("R"+Integer.toString(16+i)+": "+registers.get(temp2)+"\n");
+			//System.out.print("R"+i+": "+registers.get(temp)+"\t");
+			//System.out.print("R"+Integer.toString(16+i)+": "+registers.get(temp2)+"\n");
 		}
+		System.out.println("");
+		//System.out.println("PC: " + s_registers.get("PC") + "\t" + "OF: " + s_registers.get("OF"));
+		//System.out.println("MBR: " + s_registers.get("MBR") + "\t" + "NF: " + s_registers.get("NF"));
+		//System.out.println("MAR: " + s_registers.get("MAR") + "\t" + "ZF: " + s_registers.get("ZF"));
 	}
 
 	public HashMap<String,Integer> getRegisters(){	
