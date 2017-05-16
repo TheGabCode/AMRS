@@ -69,7 +69,6 @@ public class Scheduler{
 
 			sc.nextLine();
 		}
-		printFinalResult(registers, special_registers);
 	}
 
 	public void initQueue(){
@@ -81,19 +80,17 @@ public class Scheduler{
 	}
 
 	public void printResult(HashMap<String,Integer> registers, HashMap<String,Integer> s_registers){
-		System.out.println("");
-		System.out.println("PC: " + s_registers.get("PC") + "\t" + "OF: " + s_registers.get("OF"));
-		System.out.println("MBR: " + s_registers.get("MBR") + "\t" + "NF: " + s_registers.get("NF"));
-		System.out.println("MAR: " + s_registers.get("MAR") + "\t" + "ZF: " + s_registers.get("ZF"));
-	}
-
-	public void printFinalResult(HashMap<String,Integer> registers, HashMap<String,Integer> s_registers){
 		for(int i=1; i<17; i++){
 			String temp = "R" + Integer.toString(i);
 			String temp2 = "R" + Integer.toString(16+i);
 			System.out.print("R"+i+": "+registers.get(temp)+"\t");
 			System.out.print("R"+Integer.toString(16+i)+": "+registers.get(temp2)+"\n");
 		}
+
+		System.out.println("");
+		System.out.println("PC: " + s_registers.get("PC") + "\t" + "OF: " + s_registers.get("OF"));
+		System.out.println("MBR: " + s_registers.get("MBR") + "\t" + "NF: " + s_registers.get("NF"));
+		System.out.println("MAR: " + s_registers.get("MAR") + "\t" + "ZF: " + s_registers.get("ZF"));
 	}
 
 	public HashMap<String,Integer> getRegisters(){	
