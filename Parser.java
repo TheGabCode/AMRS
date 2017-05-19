@@ -106,4 +106,15 @@ public class Parser{
 				+"\nDependency Type: " + this.dependencies.get(i).dependencyType);
 		}
 	}
+
+	public void printDependencyTable(){
+		System.out.println("----Dependent Instruction---Instruction Dependent On---Type----");
+		for(int i = 0; i < this.dependencies.size(); i++){
+			System.out.print("\t"+this.instructions.get(this.dependencies.get(i).addressOfDependent-1).getOperation() + " " + this.instructions.get(this.dependencies.get(i).addressOfDependent-1).getOp1() + " " + this.instructions.get(this.dependencies.get(i).addressOfDependent-1).getOp2() + "\t");
+			
+			System.out.print("\t   "+this.instructions.get(this.dependencies.get(i).addressDependentOn-1).getOperation() + " " + this.instructions.get(this.dependencies.get(i).addressDependentOn-1).getOp1() + " " + this.instructions.get(this.dependencies.get(i).addressDependentOn-1).getOp2() + "\t        ");
+			
+			System.out.println(this.dependencies.get(i).dependencyType);
+		}
+	}
 }

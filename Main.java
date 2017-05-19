@@ -49,6 +49,10 @@ public class Main{
 		Scheduler pipeline = new Scheduler(instructions, parser.getDependencies(), registers, special_registers);
 
 		pipeline.start();
+		System.out.println("****SUMMARY****");
+		parser.printDependencyTable();
+		System.out.println("");
+		System.out.println("Total Clock Cycles:\t" + (pipeline.clock_cycle-1));
 		
 	}
 }
